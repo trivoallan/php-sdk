@@ -390,11 +390,13 @@ class Facebook
    * Gets a OAuth access token.
    *
    * @return String the access token
+   *
+   * @see http://www.nivas.hr/blog/2010/09/03/facebook-php-sdk-access-token-signing-bug/
    */
   public function getAccessToken() {
     $session = $this->getSession();
     // either user session signed, or app signed
-    if ($session) {
+    if ($session && !$this->overrideToAppSigned) {
       return $session['access_token'];
     } else {
       return $this->getAppId() .'|'. $this->getApiSecret();
@@ -505,6 +507,12 @@ class Facebook
     $params['api_key'] = $this->getAppId();
     $params['format'] = 'json-strings';
 
+    // HACK : http://www.nivas.hr/blog/2010/09/03/facebook-php-sdk-access-token-signing-bug/
+    if ($params['method'] == 'dashboard.multiAddNews')
+    {
+        $this->overrideToAppSigned = true;
+    }
+
     $result = json_decode($this->_oauthRequest(
       $this->getApiUrl($params['method']),
       $params
@@ -514,6 +522,10 @@ class Facebook
     if (is_array($result) && isset($result['error_code'])) {
       throw new FacebookApiException($result);
     }
+
+    // Back to normal
+    $this->overrideToAppSigned = false;
+
     return $result;
   }
 
