@@ -19,6 +19,8 @@ class FacebookApiException extends Exception
    */
   protected $result;
 
+  private $overrideToAppSigned;
+
   /**
    * Make a new API Exception with the given result.
    *
