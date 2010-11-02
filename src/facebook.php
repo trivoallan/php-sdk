@@ -508,7 +508,8 @@ class Facebook
     $params['format'] = 'json-strings';
 
     // HACK : http://www.nivas.hr/blog/2010/09/03/facebook-php-sdk-access-token-signing-bug/
-    if ($params['method'] == 'dashboard.multiAddNews')
+    $token_methods = array('dashboard.multiAddNews', 'payments.getOrderDetails');
+    if (in_array($params['method'], $token_methods))
     {
         $this->overrideToAppSigned = true;
     }
