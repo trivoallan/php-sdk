@@ -19,8 +19,6 @@ class FacebookApiException extends Exception
    */
   protected $result;
 
-  private $overrideToAppSigned;
-
   /**
    * Make a new API Exception with the given result.
    *
@@ -172,6 +170,11 @@ class Facebook
    * Indicates if the CURL based @ syntax for file uploads is enabled.
    */
   protected $fileUploadSupport = false;
+
+  /**
+   * HACK : http://www.nivas.hr/blog/2010/09/03/facebook-php-sdk-access-token-signing-bug/
+   */
+  private $overrideToAppSigned = false;
 
   /**
    * Initialize a Facebook Application.
